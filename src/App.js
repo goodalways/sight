@@ -29,7 +29,8 @@ function App() {
     setImg(imageSrc);
     setStatusMessage('Sending request...');
     setUploadProgress(10); // Initial progress
-    callGPT4(imageSrc, prompt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    callGPT4(imageSrc, prompt); 
   }, [webcamRef]);
 
   const talkmethod = (textToRead) => {
