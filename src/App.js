@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, { useRef, useState, /*useCallback*/ } from 'react';
 import './App.css';
 import Webcam from "react-webcam";
 import { useSpeechRecognition } from 'react-speech-kit';
@@ -24,14 +24,22 @@ function App() {
     facingMode: "user",
   };
 
-  const capture = useCallback(() => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImg(imageSrc);
+  // const capture = useCallback(() => {
+  //   const imageSrc = webcamRef.current.getScreenshot();
+  //   setImg(imageSrc);
+  //   setStatusMessage('Sending request...');
+  //   setUploadProgress(10); // Initial progress
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   callGPT4(imageSrc, prompt); 
+  // }, [webcamRef]);
+
+  const capture2 = () => {
+    const imageSrc2 = webcamRef.current.getScreenshot();
+    setImg(imageSrc2);
     setStatusMessage('Sending request...');
     setUploadProgress(10); // Initial progress
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    callGPT4(imageSrc, prompt); 
-  }, [webcamRef]);
+    callGPT4(imageSrc2, prompt); 
+  }
 
   const talkmethod = (textToRead) => {
     const msg = new SpeechSynthesisUtterance();
@@ -128,7 +136,7 @@ function App() {
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
           />
-          <button onClick={capture}>Capture photo</button>
+          <button onClick={capture2}>Capture photo</button>
         </>
       ) : (
         <>
