@@ -1,15 +1,46 @@
 import React, { useRef, useState, /*useCallback*/ } from 'react';
 import './App.css';
 import Webcam from "react-webcam";
-import { useSpeechRecognition } from 'react-speech-kit';
+import { useSpeechRecognition, useSpeechSynthesis } from 'react-speech-kit';
 
 function App() {
   const [speechValue, setSpeechValue] = useState('')
-  const { listen, stop } = useSpeechRecognition({
-    onResult: (speechResult) => {
-      setSpeechValue(speechResult)
+  // const { listen, listening, stop } = useSpeechRecognition({
+  //   onResult: (speechResult) => {
+  //     setSpeechValue(speechResult)
+  //   }
+  // })
+
+  const onEnd = () => {
+    // You could do something here after listening has finished
+  };
+
+  const onResult = (speechResult) => {
+    setSpeechValue(speechResult);
+  };
+
+  const onError = (event) => {
+    if (event.error === 'not-allowed') {
+      setBlocked(true);
     }
-  })
+  };
+
+  const { listen, listening, stop } = useSpeechRecognition({
+    onResult,
+    onEnd,
+    onError,
+  });
+
+  const toggle = listening
+    ? stop
+    : () => {
+        setBlocked(false);
+        listen();
+      };
+
+    const { speak, cancel, speaking } = useSpeechSynthesis({
+      onEnd,
+    });
 
   const [img, setImg] = useState(null);
   const webcamRef = useRef(null);
@@ -17,6 +48,7 @@ function App() {
   const [statusMessage, setStatusMessage] = useState('');
   const [uploadProgress, setUploadProgress] = useState(0);
   const [prompt, setPrompt] = useState('Imagine that I am a visual impaired individual. Tell me the brand and the object that I am holding. Only describe the object in the foreground. Do not describe the person holding the object.');
+  const [blocked, setBlocked] = useState(false);
 
   const videoConstraints = {
     width: 420,
@@ -33,12 +65,12 @@ function App() {
   //   callGPT4(imageSrc, prompt); 
   // }, [webcamRef]);
 
-  const capture2 = () => {
-    const imageSrc2 = webcamRef.current.getScreenshot();
-    setImg(imageSrc2);
+  const capture = () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setImg(imageSrc);
     setStatusMessage('Sending request...');
     setUploadProgress(10); // Initial progress
-    callGPT4(imageSrc2, prompt); 
+    callGPT4(imageSrc, prompt); 
   }
 
   const talkmethod = (textToRead) => {
@@ -69,7 +101,7 @@ function App() {
           ]
         }
       ],
-      max_tokens: 200
+      max_tokens: 10
     };
 
     try {
@@ -136,13 +168,25 @@ function App() {
             screenshotFormat="image/jpeg"
             videoConstraints={videoConstraints}
           />
-          <button onClick={capture2}>Capture photo</button>
+          <button onClick={capture}>Capture photo</button>
         </>
       ) : (
         <>
           <img src={img} alt="screenshot" />
           <button onClick={retakeMethod}>Retake</button>
         </>
+      )}
+      {speaking ? (
+        <button type="button" onClick={cancel}>
+          Stop
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => speak({text: apiResult})}
+        >
+          Speak
+        </button>
       )}
     </div>
       {statusMessage && <p className="status-message">{statusMessage}</p >}
@@ -162,9 +206,14 @@ function App() {
          value={speechValue}
          onChange={(event) => setSpeechValue(event.target.value)}
         />
-        <button ontouchstart={listen} ontouchend={stop}>
+        {/* <button onMouseDown={listen} onMouseUp={stop}>
           🎤
+        </button> */}
+
+        <button disabled={blocked} type="button" onClick={toggle}>
+          {listening ? 'Stop' : 'Listen'}
         </button>
+
         <button onClick={sendNewPrompt}>
           Tell me more
         </button>
