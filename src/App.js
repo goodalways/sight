@@ -101,7 +101,7 @@ function App() {
           ]
         }
       ],
-      max_tokens: 10
+      max_tokens: 200
     };
 
     try {
