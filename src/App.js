@@ -162,7 +162,7 @@ function App() {
          value={speechValue}
          onChange={(event) => setSpeechValue(event.target.value)}
         />
-        <button onMouseDown={listen} onMouseUp={stop}>
+        <button ontouchstart={listen} ontouchend={stop}>
           🎤
         </button>
         <button onClick={sendNewPrompt}>
