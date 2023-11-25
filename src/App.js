@@ -21,7 +21,7 @@ function App() {
   const videoConstraints = {
     width: 420,
     height: 420,
-    facingMode: "user",
+    facingMode: "environment",
   };
 
   // const capture = useCallback(() => {
