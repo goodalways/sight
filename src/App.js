@@ -10,6 +10,14 @@ import { v4 } from 'uuid';
 
 
 function App() {
+  const newDate = new Date();
+  const date = newDate.getDate();
+  const month = newDate.getMonth() + 1;
+  const year = newDate.getFullYear();
+  const hour = newDate.getHours();
+  const minute = newDate.getMinutes();
+  const second = newDate.getSeconds();
+
   const [speechValue, setSpeechValue] = useState('')
   // const { listen, listening, stop } = useSpeechRecognition({
   //   onResult: (speechResult) => {
@@ -171,7 +179,7 @@ function App() {
 
   const dbValue = collection(textDb, 'conversations');
   const uploadData = async (image) => {
-    await addDoc(dbValue, {filePath:image, conversation:prompt}).then((docRef) => {
+    await addDoc(dbValue, {filePath:image, conversation:prompt, dateCreated:`${year}-${month<10?`0${month}`:`${month}`}-${date}` + " " + `${hour}:${minute}:${second}`}).then((docRef) => {
       setDataId(docRef.id);
     });
   }

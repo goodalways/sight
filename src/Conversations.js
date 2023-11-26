@@ -54,6 +54,8 @@ function Conversations() {
                     <div className='Container'>
                         <img src={value.filePath} height="200" width="200" alt="screenshot" />
                         <h4>{value.conversation}</h4>
+                        <br></br>
+                        <h4>{value.dateCreated}</h4>
                     </div>
                     )
             }
