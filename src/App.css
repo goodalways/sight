@@ -4,12 +4,36 @@ body {
 }
 
 .App {
-  text-align: center;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #282c34;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+}
+
+.navbar-logo {
+  color: white;
+  font-size: 20px;
+}
+
+.navbar-menu {
+  display: flex;
+  list-style-type: none;
+  gap: 30px;
+  margin: 0;
+  align-items: center;
+}
+
+.navbar-menu li a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 .Container {
@@ -18,21 +42,27 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 50vh;
-  margin: 0 10px;
+  /* margin: 0 10px; */
+  border: 1px solid #ddd;
+  max-width: 600px;
+  text-align: center;
+  margin: 20px auto;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .drop-area {
-  border: 2px dashed #aaa;
+  /* border: 2px dashed #aaa;
   border-radius: 8px;
   padding: 30px;
   cursor: pointer;
   margin-bottom: 20px;
   position: relative;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out; */
 }
 .drop-area.drag-over {
-  border-color: #66AFE9;
-  background-color: #F7F7F7;
+  /* border-color: #66AFE9;
+  background-color: #F7F7F7; */
 }
 .image-preview {
   max-width: 100%;
@@ -53,17 +83,15 @@ body {
 }
 
 .webcam-button {
-  background-color: #007BFF;
+  /* background-color: #007BFF;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 16px; */
 }
-.webcam-button:hover {
-  background-color: #0056B3;
-}
+
 .status-message {
   color: #6C757D;
   margin-bottom: 20px;
@@ -83,17 +111,17 @@ body {
 
 
 .readout-button{
-  background-color: #007BFF;
+  /* background-color: #007BFF;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 16px; */
 }
 
 .readout-button:hover {
-  background-color: #0056B3;
+  /* background-color: #0056B3; */
 }
 
 button {

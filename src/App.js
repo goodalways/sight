@@ -1,7 +1,12 @@
 import React, { useRef, useState, /*useCallback*/ } from 'react';
 import './App.css';
+import Navbar from './Components/Navbar';
 import Webcam from "react-webcam";
 import { useSpeechRecognition, useSpeechSynthesis } from 'react-speech-kit';
+import { imageDb } from './firebaseConfig';
+import { ref, uploadString } from 'firebase/storage';
+import { v4 } from 'uuid';
+
 
 function App() {
   const [speechValue, setSpeechValue] = useState('')
@@ -71,6 +76,7 @@ function App() {
     setStatusMessage('Sending request...');
     setUploadProgress(10); // Initial progress
     callGPT4(imageSrc, prompt); 
+    uploadPhoto(imageSrc);
   }
 
   const talkmethod = (textToRead) => {
@@ -101,7 +107,7 @@ function App() {
           ]
         }
       ],
-      max_tokens: 200
+      max_tokens: 5
     };
 
     try {
@@ -153,10 +159,16 @@ function App() {
     setSpeechValue('')
   }
 
+  const uploadPhoto = (imageSrc) => {
+    const imgRef = ref(imageDb, `uploads/${v4()}.jpg`);
+    uploadString(imgRef, imageSrc, 'data_url');
+  }
+
   return (
     <div className="App">
-      <h1>Sight</h1>
+      <Navbar />
       <div className="Container">
+      <h1>Sight</h1>
       {img === null ? (
         <>
           <Webcam
@@ -188,7 +200,7 @@ function App() {
           Speak
         </button>
       )}
-    </div>
+      
       {statusMessage && <p className="status-message">{statusMessage}</p >}
       {uploadProgress > 0 && (
         <progress value={uploadProgress} max="100"></progress>
@@ -218,8 +230,8 @@ function App() {
           Tell me more
         </button>
        </div>
-
-    </div>
+    </div>   
+  </div>
   );
 }
 export default App;
