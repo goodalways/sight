@@ -3,8 +3,9 @@ import './App.css';
 import Navbar from './Components/Navbar';
 import Webcam from "react-webcam";
 import { useSpeechRecognition, useSpeechSynthesis } from 'react-speech-kit';
-import { imageDb } from './firebaseConfig';
+import { imageDb, textDb } from './firebaseConfig';
 import { ref, uploadString } from 'firebase/storage';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import { v4 } from 'uuid';
 
 
@@ -54,6 +55,7 @@ function App() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [prompt, setPrompt] = useState('Imagine that I am a visual impaired individual. Tell me the brand and the object that I am holding. Only describe the object in the foreground. Do not describe the person holding the object.');
   const [blocked, setBlocked] = useState(false);
+  const [dataId, setDataId] = useState('');
 
   const videoConstraints = {
     width: 420,
@@ -107,7 +109,7 @@ function App() {
           ]
         }
       ],
-      max_tokens: 5
+      max_tokens: 10
     };
 
     try {
@@ -142,12 +144,13 @@ function App() {
   };
 
   const sendNewPrompt = () => {
-    const newPrompt = prompt + '\n' + apiResult + '\n' + speechValue
+    const newPrompt = prompt + '\n\n' + apiResult + '\n\n' + speechValue
     setPrompt(newPrompt)
     setStatusMessage('Sending request...');
     setUploadProgress(10); // Initial progress
     callGPT4(img, newPrompt)
-    alert(newPrompt)
+    updateData(newPrompt)
+    //alert(newPrompt)
   };
 
   const retakeMethod = () => {
@@ -160,8 +163,22 @@ function App() {
   }
 
   const uploadPhoto = (imageSrc) => {
-    const imgRef = ref(imageDb, `uploads/${v4()}.jpg`);
+    const currentFileName = v4()+'.jpg';
+    const imgRef = ref(imageDb, `uploads/${currentFileName}`);
     uploadString(imgRef, imageSrc, 'data_url');
+    uploadData(imageSrc);
+  }
+
+  const dbValue = collection(textDb, 'conversations');
+  const uploadData = async (image) => {
+    await addDoc(dbValue, {filePath:image, conversation:prompt}).then((docRef) => {
+      setDataId(docRef.id);
+    });
+  }
+  
+  const updateData = async (newPrompt) => {
+    const updateDBRef = doc(textDb, 'conversations', dataId);
+    await updateDoc(updateDBRef, {conversation:newPrompt});
   }
 
   return (
@@ -229,6 +246,7 @@ function App() {
         <button onClick={sendNewPrompt}>
           Tell me more
         </button>
+        {/* <button onClick={uploadData} /> */}
        </div>
     </div>   
   </div>
