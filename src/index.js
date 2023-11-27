@@ -3,12 +3,21 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
 import Conversations from './Conversations';
+import HomePage from './HomePage';
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <Navigate to="/home" />,
+  },
+  {
+    path: "home",
+    element: <HomePage />,
+  },
+  {
+    path: "capture",
     element: <App />,
   },
   {
