@@ -6,7 +6,7 @@ function Navbar() {
 
     const commands = [
         {
-            command: ["Go to *", "Open *", "Bring me to *", "I want to have * now", "I want to * a moment", "I would like to * a moment"],
+            command: ["Go to *", "Open *", "Bring me to *", "I want to have * now", "I want to * a moment", "I would like to * a moment","I would like to * a photo"],
             callback: (redirectPage) => setRedirectUrl(redirectPage),
         },
     ];

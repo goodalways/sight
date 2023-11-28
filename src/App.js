@@ -64,6 +64,7 @@ function App() {
   const [prompt, setPrompt] = useState('Imagine that I am a visual impaired individual. Tell me the brand and the object that I am holding. Only describe the object in the foreground. Do not describe the person holding the object.');
   const [blocked, setBlocked] = useState(false);
   const [dataId, setDataId] = useState('');
+  const [voiceArray, setVoices] = useState([]);
 
   const videoConstraints = {
     width: 420,
@@ -91,6 +92,10 @@ function App() {
 
   const talkmethod = (textToRead) => {
     const msg = new SpeechSynthesisUtterance();
+    const voices = window.speechSynthesis.getVoices().filter(voice => voice.lang === 'en-AU' || voice.lang === 'en-GB' || voice.lang === 'en-US');
+    msg.voice = voices[24];
+    //console.log(voices);
+    setVoices(voices);
     msg.text = textToRead;
     window.speechSynthesis.speak(msg);
   }
@@ -117,7 +122,7 @@ function App() {
           ]
         }
       ],
-      max_tokens: 10
+      max_tokens: 500 
     };
 
     try {
@@ -220,7 +225,7 @@ function App() {
       ) : (
         <button
           type="button"
-          onClick={() => speak({text: apiResult})}
+          onClick={() => speak({text: apiResult, voice: voiceArray[24]})}
         >
           Speak
         </button>
@@ -241,7 +246,8 @@ function App() {
       <div className="result">
        <textarea
          value={speechValue}
-         onChange={(event) => setSpeechValue(event.target.value)}
+         onChange={(event) => setSpeechValue(event.target.value)} 
+         
         />
         {/* <button onMouseDown={listen} onMouseUp={stop}>
           🎤
